@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom fonts */
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .font-roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+        /* Basic animation for fade-in */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-down {
+            animation: fadeInDown 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex font-roboto">
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-gray-800 shadow-xl flex flex-col p-6 rounded-r-2xl border-r border-blue-700">
+        <div class="mb-10">
+            <h1 class="text-3xl font-orbitron font-extrabold text-blue-400">taskVO</h1>
+        </div>
+        <nav class="flex-1 space-y-4">
+            <a href="{% url 'core:dashboard' %}" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-lg font-semibold transition-colors duration-300 bg-blue-600 text-white shadow-md">
+                <i class="fas fa-home"></i> <span>Home</span>
+            </a>
+            <a href="{% url 'core:tasks' %}" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-lg font-semibold transition-colors duration-300 hover:bg-gray-700 text-gray-200">
+                <i class="fas fa-tasks"></i> <span>Tasks</span>
+            </a>
+            <a href="/calendar.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-lg font-semibold transition-colors duration-300 hover:bg-gray-700 text-gray-200">
+                <i class="fas fa-calendar-alt"></i> <span>Calendar</span>
+            </a>
+            <a href="/ai.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-lg font-semibold transition-colors duration-300 hover:bg-gray-700 text-gray-200">
+                <i class="fas fa-robot"></i> <span>AI Command</span>
+            </a>
+            <a href="/settings.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-lg font-semibold transition-colors duration-300 hover:bg-gray-700 text-gray-200">
+                <i class="fas fa-cog"></i> <span>Settings</span>
+            </a>
+            <a href="/settings.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-lg font-semibold transition-colors duration-300 hover:bg-gray-700 text-gray-200">
+                <i class="fas fa-sign-out"></i> <span>Logout</span>
+            </a>
+        </nav>
+        <div class="mt-auto text-center text-sm text-gray-500">
+            <p>User ID: <span id="userIdDisplay">user-great-12345</span></p>
+        </div>
+    </aside>
+    {% block content %} {% endblock %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('aside nav a').forEach(link => {
+                const linkPath = link.getAttribute('href');
+                // Check for exact path match, or if it's the root and link is for dashboard.html
+                if (currentPath === linkPath || (currentPath === '/' && linkPath === '/dashboard.html')) {
+                    link.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+                    link.classList.remove('hover:bg-gray-700', 'text-gray-200');
+                } else {
+                    link.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                    link.classList.add('hover:bg-gray-700', 'text-gray-200');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

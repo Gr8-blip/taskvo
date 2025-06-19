@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %} {% endblock %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+</head>
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm py-4 px-6 md:px-16 flex items-center justify-between sticky top-0 z-50 rounded-b-lg">
+        <div class="logo">
+            <a href="{% url 'core:home' %}">
+                <h1 class="text-2xl md:text-3xl font-bold font-orbitron text-slate-900 logo-h1">task<span>VO</span></h1>
+            </a>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+            <ul class="flex space-x-6">
+                <li><a href="#hero" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-300 rounded-md p-2">Home</a></li>
+                <li><a href="#about" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-300 rounded-md p-2">About Us</a></li>
+                <li><a href="#features" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-300 rounded-md p-2">Features</a></li>
+                <li><a href="#how-it-works" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-300 rounded-md p-2">How It Works</a></li>
+                <li><a href="#testimonials" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-300 rounded-md p-2">Testimonials</a></li>
+                <li><a href="#pricing" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-300 rounded-md p-2">Pricing</a></li>
+                <li><a href="#contact" class="text-slate-700 hover:text-blue-600 font-medium transition-colors duration-300 rounded-md p-2">Contact</a></li>
+            </ul>
+            <div class="flex space-x-4">
+                <a href="{% url 'users:login' %}" class="px-5 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors duration-300 font-medium shadow-sm">Login</a>
+                <a href="{% url 'users:register' %}" class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300 font-medium shadow-md">Sign Up</a>
+            </div>
+        </div>
+        <!-- Mobile Menu Button (Hamburger) -->
+        <button class="md:hidden text-slate-700 focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </nav>
+
+
+    {% block content %} {% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12 px-6 md:px-16 rounded-t-xl">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 text-center md:text-left">
+            <div class="footer-col">
+                <h1 class="text-3xl font-bold font-orbitron text-white logo-h1 mb-4">task<span>VO</span></h1>
+                <p class="text-slate-400 text-sm leading-relaxed mb-4">&copy; 2025 taskVO. All rights reserved.</p>
+                <div class="flex justify-center md:justify-start space-x-4">
+                    <a href="#" aria-label="Facebook" class="text-slate-400 hover:text-blue-500 transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22H12c5.523 0 10-4.477 10-10z" clip-rule="evenodd"></path></svg>
+                    </a>
+                    <a href="#" aria-label="Twitter" class="text-slate-400 hover:text-blue-500 transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c1.838 1.488 4.09 2.195 6.46 2.195 7.027 0 10.82-5.835 10.82-10.82 0-.164-.003-.328-.009-.49A7.721 7.721 0 0024 4.083a7.784 7.784 0 01-2.227.608 3.896 3.896 0 001.7-2.146 7.79 7.79 0 01-2.477.948 3.892 3.892 0 00-6.648 3.551A11.025 11.025 0 013.3 4.25a3.895 3.895 0 001.21 5.176c-.682-.022-1.32-.209-1.884-.519v.049a3.892 3.892 0 003.12 3.811 3.96 3.96 0 01-1.758.067 3.897 3.897 0 003.626 2.709A7.886 7.886 0 010 18.784a10.985 10.985 0 005.975 1.767c7.172 0 11.07-5.94 11.07-11.07 0-.169-.004-.337-.012-.505A7.876 7.876 0 0024 3.251z"></path></svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn" class="text-slate-400 hover:text-blue-500 transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3V10h3v9zm-1.5-10a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm12.5 10h-3V13.5c0-1.399-.877-2.05-1.756-2.05-1.547 0-1.838 1.157-1.838 2.27V19h-3v-9h3v1.171c.469-.774 1.341-1.371 2.993-1.371 3.12 0 4.107 2.093 4.107 4.842V19z" clip-rule="evenodd"></path></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3 class="text-xl font-semibold text-blue-400 mb-4">Quick Links</h3>
+                <ul class="space-y-2 text-slate-300">
+                    <li><a href="#hero" class="hover:text-blue-500 transition-colors duration-300">Home</a></li>
+                    <li><a href="#about" class="hover:text-blue-500 transition-colors duration-300">About Us</a></li>
+                    <li><a href="#features" class="hover:text-blue-500 transition-colors duration-300">Features</a></li>
+                    <li><a href="#contact" class="hover:text-blue-500 transition-colors duration-300">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3 class="text-xl font-semibold text-blue-400 mb-4">Services</h3>
+                <ul class="space-y-2 text-slate-300">
+                    <li><a href="#" class="hover:text-blue-500 transition-colors duration-300">Task Management</a></li>
+                    <li><a href="#" class="hover:text-blue-500 transition-colors duration-300">AI Assistance</a></li>
+                    <li><a href="#" class="hover:text-blue-500 transition-colors duration-300">Team Collaboration</a></li>
+                    <li><a href="#" class="hover:text-blue-500 transition-colors duration-300">Progress Tracking</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3 class="text-xl font-semibold text-blue-400 mb-4">Support</h3>
+                <ul class="space-y-2 text-slate-300">
+                    <li><a href="#" class="hover:text-blue-500 transition-colors duration-300">FAQ</a></li>
+                    <li><a href="#" class="hover:text-blue-500 transition-colors duration-300">Help Center</a></li>
+                    <li><a href="#" class="hover:text-blue-500 transition-colors duration-300">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-blue-500 transition-colors duration-300">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>

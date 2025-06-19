@@ -1,0 +1,223 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+    <title>TaskVO - Smarter Task Management</title>
+{% endblock %}
+{% block content %}
+    <!-- Hero Section -->
+    <header id="hero" class="bg-slate-50 min-h-screen flex items-center justify-center py-16 px-6 md:px-16">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-12 align-items-center">
+            <div class="hero-content text-center md:text-left md:w-1/2">
+                <h2 class="text-5xl md:text-6xl font-extrabold font-orbitron text-slate-900 leading-tight mb-6">
+                    Welcome to <span class="text-blue-600">taskVO</span>
+                </h2>
+                <p class="text-lg md:text-xl text-slate-700 leading-relaxed mb-8">
+                    Your all-in-one platform for smarter task management and productivity.
+                    Organize your work, collaborate seamlessly, and let our AI assistant handle tasks for you—just ask to
+                    add, update, or delete tasks with ease!
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+                    <a href="{% url 'users:register' %}" class="cta-button bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 shadow-lg">Get Started</a>
+                </div>
+            </div>
+            <div class="hero-image md:w-1/2 flex justify-center">
+                <img src="{% static 'images/hero-image.jpg' %}" alt="">
+            </div>
+        </div>
+    </header>
+
+    <!-- About Us Section -->
+    <section id="about" class="bg-white py-16 px-6 md:px-16">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold font-orbitron text-slate-900 mb-6">
+                About <span class="text-blue-600">taskVO</span>
+            </h2>
+            <p class="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto mb-12">
+                We are dedicated to revolutionizing productivity through intelligent and intuitive task management solutions.
+                Our mission is to empower individuals and teams to achieve their goals with less effort and more clarity.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="text-left">
+                    <h3 class="text-3xl font-semibold text-slate-800 mb-4">Our Mission</h3>
+                    <p class="text-md text-slate-600 leading-relaxed mb-6">
+                        To provide a seamless and powerful platform that integrates advanced AI to simplify daily tasks,
+                        enhance collaboration, and drive efficiency for everyone, from individuals to large enterprises.
+                    </p>
+                    <h3 class="text-3xl font-semibold text-slate-800 mb-4">Our Vision</h3>
+                    <p class="text-md text-slate-600 leading-relaxed">
+                        To be the leading global platform for intelligent productivity, where every task becomes a step towards success,
+                        effortlessly guided by technology.
+                    </p>
+                </div>
+                <div class="flex justify-center">
+                    <img src="https://placehold.co/500x350/BFDBFE/1E40AF?text=Team+Collaboration" alt="Team Collaboration" class="w-full max-w-md h-auto rounded-xl shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="bg-slate-50 py-16 px-6 md:px-16">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold font-orbitron text-slate-900 mb-12">
+                Key <span class="text-blue-600">Features</span>
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out border border-blue-100">
+                    <div class="text-blue-600 mb-4">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-3">Smart Task Management</h3>
+                    <p class="text-slate-600 leading-relaxed">Effortlessly create, organize, and track your tasks with intuitive tools and customizable workflows.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out border border-blue-100">
+                    <div class="text-blue-600 mb-4">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m7 0V5a2 2 0 012-2h2a2 2 0 012 2v6m-6 0h6"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-3">AI-Powered Assistant</h3>
+                    <p class="text-slate-600 leading-relaxed">Leverage intelligent AI to automate tasks, set smart reminders, and get predictive insights for peak productivity.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out border border-blue-100">
+                    <div class="text-blue-600 mb-4">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-4v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2H1m16 0h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m-10 9h4v-2a4 4 0 00-4-4H3a4 4 0 00-4 4v2h1m6 0v4a2 2 0 002 2h2a2 2 0 002-2v-4"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-3">Seamless Collaboration</h3>
+                    <p class="text-slate-600 leading-relaxed">Share tasks, assign roles, and communicate effectively with your team members in a shared workspace.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out border border-blue-100">
+                    <div class="text-blue-600 mb-4">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-3">Progress Tracking</h3>
+                    <p class="text-slate-600 leading-relaxed">Visualize your productivity and project progress with intuitive dashboards and detailed reports.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="bg-white py-16 px-6 md:px-16">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold font-orbitron text-slate-900 mb-12">
+                How It <span class="text-blue-600">Works</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="flex flex-col items-center p-6 rounded-xl shadow-lg border border-blue-100 bg-slate-50">
+                    <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-md">1</div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-3">Sign Up & Set Up</h3>
+                    <p class="text-slate-600 leading-relaxed text-center">Create your free account and personalize your workspace in minutes. It's quick and easy!</p>
+                </div>
+                <div class="flex flex-col items-center p-6 rounded-xl shadow-lg border border-blue-100 bg-slate-50">
+                    <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-md">2</div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-3">Organize Your Tasks</h3>
+                    <p class="text-slate-600 leading-relaxed text-center">Add tasks, set deadlines, assign priorities, and categorize them effortlessly with our intuitive interface.</p>
+                </div>
+                <div class="flex flex-col items-center p-6 rounded-xl shadow-lg border border-blue-100 bg-slate-50">
+                    <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mb-6 shadow-md">3</div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-3">Boost Productivity with AI</h3>
+                    <p class="text-slate-600 leading-relaxed text-center">Let our AI assistant help you manage, remind, and even complete tasks through simple commands.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="gradient-bg py-16 px-6 md:px-16 text-white">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold font-orbitron mb-12">
+                What Our <span class="text-white">Users Say</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-lg text-slate-800 flex flex-col items-center">
+                    <img src="https://placehold.co/80x80/CBD5E1/475569?text=JD" alt="User Avatar" class="w-20 h-20 rounded-full mb-4 object-cover border-4 border-blue-200">
+                    <p class="text-lg italic mb-4">"TaskVO has transformed how I manage my projects. The AI assistant is a game-changer!"</p>
+                    <p class="font-semibold text-blue-600">- Jane Doe, Project Manager</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg text-slate-800 flex flex-col items-center">
+                    <img src="https://placehold.co/80x80/CBD5E1/475569?text=MS" alt="User Avatar" class="w-20 h-20 rounded-full mb-4 object-cover border-4 border-blue-200">
+                    <p class="text-lg italic mb-4">"Absolutely brilliant! My team's collaboration has never been smoother thanks to TaskVO."</p>
+                    <p class="font-semibold text-blue-600">- Mark Smith, Tech Lead</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg text-slate-800 flex flex-col items-center">
+                    <img src="https://placehold.co/80x80/CBD5E1/475569?text=AL" alt="User Avatar" class="w-20 h-20 rounded-full mb-4 object-cover border-4 border-blue-200">
+                    <p class="text-lg italic mb-4">"Finally, a productivity tool that truly helps instead of adding complexity. Highly recommend!"</p>
+                    <p class="font-semibold text-blue-600">- Alice Lee, Freelancer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="bg-white py-16 px-6 md:px-16">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold font-orbitron text-slate-900 mb-12">
+                Simple <span class="text-blue-600">Pricing</span>
+            </h2>
+            <p class="text-lg text-slate-700 max-w-2xl mx-auto mb-12">Choose the plan that fits your needs. All plans include access to our AI assistant and seamless task management.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Free Plan -->
+                <div class="bg-slate-50 p-8 rounded-xl shadow-lg border border-blue-100 flex flex-col">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4">Free</h3>
+                    <p class="text-5xl font-extrabold text-blue-600 mb-6">$0<span class="text-xl text-slate-600 font-medium">/month</span></p>
+                    <ul class="text-slate-700 text-left space-y-3 mb-8 flex-grow">
+                        <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Basic Task Management</li>
+                        <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Limited AI Features</li>
+                        <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>1 User Account</li>
+                        <li class="flex items-center"><svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Community Forum Access</li>
+                    </ul>
+                    <a href="#" class="cta-button bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 shadow-md">Get Started Free</a>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="bg-blue-600 p-8 rounded-xl shadow-xl border border-blue-700 flex flex-col transform scale-105">
+                    <h3 class="text-3xl font-bold text-white mb-4">Pro</h3>
+                    <p class="text-5xl font-extrabold text-white mb-6">₦30,400<span class="text-xl text-blue-200 font-medium">/month</span></p>
+                    <ul class="text-blue-100 text-left space-y-3 mb-8 flex-grow">
+                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Unlimited Projects</li>
+                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Full AI Capabilities</li>
+                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Guest Access (up to 10)</li>
+                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Advanced Reporting</li>
+                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Integration with Popular Apps</li>
+                    </ul>
+                    <a href="#" class="cta-button bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-100 shadow-md">Choose Pro</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section (Bottom) -->
+    <section id="cta-bottom" class="gradient-bg py-16 px-6 md:px-16 text-white text-center rounded-t-xl shadow-xl">
+        <div class="container mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold font-orbitron mb-6">
+                Ready to boost your <span class="text-white">productivity?</span>
+            </h2>
+            <p class="text-lg md:text-xl opacity-90 mb-10">Join taskVO today and transform the way you manage your work.</p>
+            <a href="{% url 'users:register' %}" class="cta-button bg-white text-blue-600 px-10 py-4 rounded-lg font-extrabold text-xl hover:bg-blue-100 shadow-lg">Sign Up Now</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-white py-16 px-6 md:px-16">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl md:text-5xl font-bold font-orbitron text-slate-900 mb-12">
+                Get In <span class="text-blue-600">Touch</span>
+            </h2>
+            <div class="max-w-2xl mx-auto bg-slate-50 p-8 rounded-xl shadow-lg border border-blue-100">
+                <form class="space-y-6 text-left">
+                    <div>
+                        <label for="name" class="block text-slate-700 text-lg font-semibold mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300" placeholder="Your Name">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-slate-700 text-lg font-semibold mb-2">Email</label>
+                        <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300" placeholder="your@example.com">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-slate-700 text-lg font-semibold mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-300 resize-y" placeholder="Your Message"></textarea>
+                    </div>
+                    <button type="submit" class="cta-button bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 shadow-md w-full">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}
