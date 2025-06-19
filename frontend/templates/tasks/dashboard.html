@@ -1,0 +1,78 @@
+{% extends "tasks/base.html" %}
+
+<title>{% block title %} Dasboard &mdash; TaskVO {% endblock %} </title>
+
+{% block content %}
+    <!-- Main Content Area - Workspace Layout -->
+    <main class="flex-1 p-4 sm:p-8 overflow-auto">
+        <h2 class="text-4xl font-orbitron font-bold text-blue-400 mb-8 animate-fade-in-down">Dashboard Overview</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Welcome & Task Summary Card -->
+            <div class="bg-gray-800 rounded-2xl shadow-xl border border-blue-700 p-6 flex flex-col justify-between animate-fade-in-down">
+                <h3 class="text-3xl font-orbitron font-bold text-blue-400 mb-4">👋 Welcome, {{ user.username }}!</h3>
+                <p class="text-xl font-roboto text-gray-300">
+                    <i class="fas fa-hourglass-half text-blue-400 mr-2"></i> You've got <span class="font-bold text-blue-300">3</span> tasks left today!
+                </p>
+                <div class="mt-auto text-sm text-gray-500 pt-4 border-t border-gray-700/50">
+                    <p>Last updated: June 19, 2025</p>
+                </div>
+            </div>
+
+            <!-- Progress Bar Card -->
+            <div class="bg-gray-800 rounded-2xl shadow-xl border border-blue-700 p-6 flex flex-col justify-between animate-fade-in-down" style="animation-delay: 0.1s;">
+                <h3 class="text-2xl font-orbitron text-blue-400 mb-4">✅ Task Progress</h3>
+                <div class="w-full bg-gray-700 rounded-full h-4 mb-3 overflow-hidden shadow-inner">
+                    <div class="bg-blue-500 h-4 rounded-full" style="width: 40%;"></div>
+                </div>
+                <div class="text-center text-lg font-semibold text-gray-300">2/5 tasks complete</div>
+                <div class="mt-auto text-sm text-gray-500 pt-4 border-t border-gray-700/50">
+                    <p>Keep up the great work!</p>
+                </div>
+            </div>
+
+            <!-- Goal of the Day Card -->
+            <div class="bg-gray-800 rounded-2xl shadow-xl border border-blue-700 p-6 flex flex-col justify-between animate-fade-in-down" style="animation-delay: 0.2s;">
+                <h3 class="text-2xl font-orbitron text-blue-400 mb-4">🎯 Goal of the day:</h3>
+                <p class="text-lg font-roboto text-gray-200">Conquer your priorities with focus and determination!</p>
+                <div class="mt-auto text-sm text-gray-500 pt-4 border-t border-gray-700/50">
+                    <p>Stay focused!</p>
+                </div>
+            </div>
+
+            <!-- Daily Motivation/Scripture Card -->
+            <div class="bg-gray-800 rounded-2xl shadow-xl border border-blue-700 p-6 flex flex-col justify-between animate-fade-in-down" style="animation-delay: 0.3s;">
+                <h3 class="text-2xl font-orbitron text-blue-400 mb-4">🧠 Daily Motivation:</h3>
+                <p class="text-lg font-roboto text-gray-200 italic">"I can do all things through Christ who strengthens me." - Philippians 4:13</p>
+                <div class="mt-auto text-sm text-gray-500 pt-4 border-t border-gray-700/50">
+                    <p>Inspiration for your day.</p>
+                </div>
+            </div>
+
+            <!-- Mini Chart Placeholder Card -->
+            <div class="bg-gray-800 rounded-2xl shadow-xl border border-blue-700 p-6 flex flex-col justify-center items-center animate-fade-in-down" style="animation-delay: 0.4s;">
+                <h3 class="text-2xl font-orbitron text-blue-400 mb-4">📈 Task Completion Trends</h3>
+                <div class="flex items-center justify-center h-24 w-full bg-gray-700 rounded-lg text-gray-400 text-lg">
+                    [Mini Chart Placeholder]
+                </div>
+                <div class="mt-auto text-sm text-gray-500 pt-4 border-t border-gray-700/50 w-full text-center">
+                    <p>Data visualization coming soon!</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions/Recent Activity Placeholder Card -->
+            <div class="bg-gray-800 rounded-2xl shadow-xl border border-blue-700 p-6 flex flex-col justify-between animate-fade-in-down" style="animation-delay: 0.5s;">
+                <h3 class="text-2xl font-orbitron text-blue-400 mb-4">⚡ Quick Actions</h3>
+                <ul class="text-lg text-gray-200 space-y-2">
+                    <li><a href="/tasks.html" class="hover:text-blue-400 transition-colors"><i class="fas fa-plus-circle mr-2"></i> Add New Task</a></li>
+                    <li><a href="/tasks.html" class="hover:text-blue-400 transition-colors"><i class="fas fa-list-check mr-2"></i> View All Pending</a></li>
+                    <li><a href="#" class="text-gray-400 cursor-not-allowed"><i class="fas fa-cogs mr-2"></i> Configure Widgets (Later)</a></li>
+                </ul>
+                <div class="mt-auto text-sm text-gray-500 pt-4 border-t border-gray-700/50">
+                    <p>Access key features quickly.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

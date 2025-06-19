@@ -1,0 +1,12 @@
+
+<svg width="150" height="150" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .text-task { fill: #0F172A; }
+    .text-vo { fill: #3B82F6; }
+    .font { font-family: 'Segoe UI', sans-serif; font-size: 60px; font-weight: bold; }
+  </style>
+  <!-- Combined "taskVO" with different fills but zero spacing -->
+  <text x="10" y="70" class="font">
+    <tspan class="text-task">task</tspan><tspan class="text-vo">VO</tspan>
+  </text>
+</svg>

@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TaskVO</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+    <section class="min-h-screen flex items-center justify-center py-16 px-6 md:px-16 bg-gray-50">
+        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 max-w-lg w-full">
+            <!-- Logo -->
+            <div class="flex justify-center mb-6">
+                <a href="{% url 'core:home' %}">
+                    <h1 class="text-3xl md:text-4xl font-bold font-orbitron text-slate-900 logo-h1">
+                        task<span class="text-blue-600">VO</span>
+                    </h1>
+                </a>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center">Sign In to Your Account</h2>
+            <p class="text-gray-600 text-center mb-8">Welcome back! Log in to continue managing your tasks.</p>
+            
+            <!-- Non-field Errors -->
+            {% if form.non_field_errors %}
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <ul class="list-disc list-inside text-sm text-red-600">
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 p-3 rounded bg-red-100 text-red-700 text-sm text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-field">
+                        <label for="{{ field.id_for_label }}" class="font-semibold text-gray-700">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <ul class="list-disc list-inside text-sm text-red-600 mt-1">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if field.help_text %}
+                            <p class="text-[15px] text-gray-500 mt-1">{{ field.help_text }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200">
+                    Login
+                </button>
+            </form>
+            <p class="text-center text-gray-600 mt-6">
+                Don't have an account? 
+                <a href="{% url 'users:register' %}" class="text-blue-600 hover:underline font-medium">Register</a>
+            </p>
+        </div>
+    </section>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+</body>
+</html>

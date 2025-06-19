@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Inter:wght@100..900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: #0F172A;
+    /* Slate-900 */
+    background-color: #F8FAFC;
+    /* Slate-50 */
+}
+
+.font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* Custom styles for specific elements not easily handled by Tailwind alone */
+.cta-button {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+}
+
+.logo-h1 span {
+    color: #3B82F6;
+    /* Blue-500 */
+}
+
+.gradient-bg {
+    background: linear-gradient(to right, #3B82F6, #2563EB);
+    /* Blue-500 to Blue-700 */
+}
