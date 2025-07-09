@@ -1,0 +1,244 @@
+{% extends "tasks/base.html" %}
+
+{% block title %}taskVO AI Assistant{% endblock %}
+
+{% block content %}
+<main class="min-h-screen p-6 sm:p-8 flex flex-col justify-center items-center overflow-hidden">
+    <!-- Welcome Screen (Visible when no chat) -->
+    <div id="welcome-screen" class="flex flex-col items-center text-center w-full max-w-4xl transition-all duration-500 ease-in-out">
+        <h1 class="text-5xl font-futura font-bold text-blue-300 mb-8 tracking-wide animate-slide-in">Welcome {{ request.user.username }}</h1>
+        <div class="flex flex-col items-center space-y-4 w-full">
+            <div class="relative w-full max-w-4xl">
+                <input type="text" id="user-input" placeholder="Ask anything?"
+                       class="w-full p-5 pr-16 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg text-gray-800 placeholder-gray-400 font-futura transition-all duration-200 h-14" />
+                <button id="send-button" class="absolute right-2 top-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-md transition-all duration-200 shadow-md h-10 flex items-center justify-center">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="flex space-x-4">
+                <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-all duration-200 flex items-center space-x-2" onclick="sendSuggestion('Add a task')"><i class="fas fa-plus"></i> Add a task</button>
+                <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-all duration-200 flex items-center space-x-2" onclick="sendSuggestion('Eat breakfast')"><i class="fas fa-utensils"></i> Eat breakfast</button>
+                <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-all duration-200 flex items-center space-x-2" onclick="sendSuggestion('Schedule a meeting')"><i class="fas fa-calendar"></i> Schedule a meeting</button>
+                <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-all duration-200 flex items-center space-x-2" onclick="sendSuggestion('Check my tasks')"><i class="fas fa-check"></i> Check my tasks</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Interface (Visible when chatting) -->
+    <div id="chat-interface" class="hidden w-full max-w-4xl mx-auto flex-col flex-1 relative overflow-hidden transition-all duration-500 ease-in-out">
+        <h2 class="text-5xl font-futura font-bold text-blue-300 mb-8 text-center tracking-wide animate-slide-in">taskVO AI Assistant</h2>
+        <div class="relative flex flex-col p-6 rounded-2xl shadow-2xl border border-gray-800/50 flex-1 overflow-hidden">
+            <!-- Chat History Display Area -->
+            <div id="chat-history" class="flex-1 overflow-y-auto space-y-3 p-4 mb-4 rounded-lg border border-gray-800/50 custom-scrollbar font-futura text-gray-200">
+                <!-- Chat messages will be dynamically added here -->
+            </div>
+
+            <!-- User Input Area -->
+            <div class="relative w-full">
+                <input type="text" id="user-input-active" placeholder="Ask anything..."
+                       class="w-full p-5 pr-16 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg text-gray-800 placeholder-gray-400 font-futura transition-all duration-200 h-14" />
+                <button id="send-button-active" class="absolute right-2 top-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-md transition-all duration-200 shadow-md h-10 flex items-center justify-center">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div id="typing-indicator" class="text-blue-300 text-sm mt-2 hidden flex items-center space-x-1">
+                <span>AI is typing</span>
+                <div class="flex space-x-1">
+                    <div class="w-2 h-2 bg-blue-300 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-blue-300 rounded-full animate-bounce delay-100"></div>
+                    <div class="w-2 h-2 bg-blue-300 rounded-full animate-bounce delay-200"></div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="text-center text-blue-300 mt-2 hidden font-futura animate-pulse text-sm">
+                <i class="fas fa-spinner fa-spin mr-1"></i> Thinking...
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    /* Import futuristic font */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+    /* Apply futuristic font */
+    .font-futura {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 700;
+    }
+
+    /* Custom scrollbar for chat history */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #1F2937;
+        border-radius: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #4B9EFA;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #2563EB;
+    }
+
+    /* Custom animations */
+    @keyframes slide-in {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    .animate-slide-in {
+        animation: slide-in 0.5s ease-out;
+    }
+
+    .animate-fade-in {
+        animation: fade-in 0.5s ease-out;
+    }
+
+    .animate-bounce {
+        animation: bounce 0.6s infinite;
+    }
+
+    /* Enhanced transitions */
+    .transition-all {
+        transition: all 0.3s ease;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const chatInterface = document.getElementById('chat-interface');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const chatHistory = document.getElementById('chat-history');
+        const userInputActive = document.getElementById('user-input-active');
+        const sendButtonActive = document.getElementById('send-button-active');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const loadingIndicator = document.getElementById('loading-indicator');
+
+        // Toggle to chat interface and send prompt
+        sendButton.addEventListener('click', function() {
+            const message = userInput.value.trim();
+            if (message) {
+                welcomeScreen.classList.add('hidden');
+                chatInterface.classList.remove('hidden');
+                addMessageToChat('You', message, true);
+                sendToAICommand(message);
+                userInputActive.focus();
+            }
+        });
+
+        // Send from chat interface
+        sendButtonActive.addEventListener('click', function() {
+            const message = userInputActive.value.trim();
+            if (message) {
+                addMessageToChat('You', message, true);
+                userInputActive.value = '';
+                sendToAICommand(message);
+            }
+        });
+
+        // Enter key support
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendButton.click();
+        });
+        userInputActive.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendButtonActive.click();
+        });
+
+        // Send suggestion as prompt
+        window.sendSuggestion = function(suggestion) {
+            userInput.value = suggestion;
+            sendButton.click();
+        };
+
+        // Helper to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Add message to chat
+        function addMessageToChat(sender, message, isUser = false) {
+            typingIndicator.classList.add('hidden');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('flex', isUser ? 'justify-end' : 'justify-start', 'animate-fade-in');
+
+            const bubble = document.createElement('div');
+            bubble.classList.add(
+                'p-3', 'rounded-lg', 'max-w-[70%]', 'font-futura', 'transition-all', 'duration-200',
+                isUser ? 'bg-gradient-to-l' : 'bg-gradient-to-r',
+                isUser ? 'from-gray-700' : 'from-blue-600',
+                isUser ? 'to-gray-800' : 'to-blue-800',
+                'text-white'
+            );
+
+            const messageText = document.createElement('p');
+            messageText.classList.add('text-base', 'leading-relaxed');
+            messageText.innerHTML = message;
+
+            bubble.appendChild(messageText);
+            messageElement.appendChild(bubble);
+            chatHistory.appendChild(messageElement);
+
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        // Send message to backend ai_command
+        function sendToAICommand(userMessage) {
+            loadingIndicator.classList.remove('hidden');
+            fetch("{% url 'core:ai_command' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ 'user_message': userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loadingIndicator.classList.add('hidden');
+                if (data.message) {
+                    addMessageToChat('AI', data.message);
+                } else {
+                    addMessageToChat('AI', "Huh, didn’t catch that, bruh.");
+                }
+            })
+            .catch(() => {
+                loadingIndicator.classList.add('hidden');
+                addMessageToChat('AI', "Oops, something glitched out!");
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -4,20 +4,23 @@
 
 {% block content %}
 <main class="flex-1 p-4 sm:p-8 overflow-auto">
-
     <h2 class="text-4xl font-orbitron font-bold text-blue-400 mb-8 animate-fade-in-down text-center">Your Task Warzone</h2>
 
     <div class="flex flex-col p-6 bg-gray-800 rounded-2xl shadow-xl border border-blue-700 w-full max-w-4xl mx-auto space-y-6">
-
         <!-- Add Task Form -->
         <div class="bg-gray-700 p-5 rounded-lg shadow-inner border border-gray-600">
-            <form action="#" method="post" class="flex flex-col gap-4">
+            <form method="post" class="flex flex-col gap-4">
                 {% csrf_token %}
                 <input type="text" name="task_text" placeholder="Task Title (e.g., Finish Project Report)" required
                        class="w-full p-3 rounded-lg bg-gray-900 text-gray-100 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg placeholder-gray-400" />
 
                 <textarea name="task_description" placeholder="Description (Optional): Add more details here..."
                           class="w-full p-3 rounded-lg bg-gray-900 text-gray-100 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base placeholder-gray-400 resize-y min-h-[60px]"></textarea>
+
+                <button id="generateDescription" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 shadow-md">
+                    <i class="fas fa-magic mr-2"></i> Generate description
+                </button>
+
 
                 <!-- Category Field -->
                 <div class="relative w-full">
@@ -33,14 +36,13 @@
                         {% for category in duplicates_removed %}
                             <option value="{{ category.name|capfirst }}">{{ category.name|capfirst }}</option>
                         {% endfor %}
-                        <option value="Other">Other</option> {# Added "Other" option #}
+                        <option value="Other">Other</option>
                     </select>
                     <div class="pointer-events-none absolute inset-y-0 right-0 top-7 flex items-center px-2 text-gray-400">
                         <i class="fas fa-chevron-down"></i>
                     </div>
                 </div>
 
-                {# Input field for "Other" category, initially hidden #}
                 <input type="text" id="other-category-input" name="other_category_text" placeholder="Specify category..."
                        class="w-full p-3 rounded-lg bg-gray-900 text-gray-100 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg placeholder-gray-400 hidden" />
 
@@ -58,18 +60,15 @@
             </form>
         </div>
 
-        <!-- Filter Bar, Tag Filter, Search Bar - Enhanced Alignment -->
+        <!-- Filter Bar, Tag Filter, Search Bar -->
         <div class="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0 lg:space-x-4 mb-4">
-            <!-- Filter Buttons -->
             <div class="flex justify-center flex-wrap gap-2 w-full lg:w-auto">
                 <a href="?filter=all" class="filter-btn px-5 py-2 rounded-lg font-semibold shadow-md transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-700">All</a>
                 <a href="?filter=pending" class="filter-btn px-5 py-2 rounded-lg font-semibold shadow-md transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-700">Pending</a>
                 <a href="?filter=completed" class="filter-btn px-5 py-2 rounded-lg font-semibold shadow-md transition-colors duration-200 bg-gray-600 text-gray-200 hover:bg-gray-700">Completed</a>
             </div>
 
-            <!-- Tag Filter Dropdown and Search Bar - Grouped for better alignment -->
             <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
-                <!-- Category Filter Dropdown -->
                 <div class="relative w-full sm:w-auto flex-1">
                     <form action="" class="select-form" method="post">
                         {% csrf_token %}
@@ -90,7 +89,6 @@
                     </div>
                 </div>
 
-                <!-- Search Bar -->
                 <form action="#" method="get" class="w-full sm:w-auto flex-1">
                     <input type="search" name="q" placeholder="Search tasks..."
                            class="w-full p-3 rounded-lg bg-gray-900 text-gray-100 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg placeholder-gray-400"
@@ -100,8 +98,7 @@
         </div>
 
         <!-- Task List -->
-        <div id="taskList" class="space-y-3 max-h-96 overflow-y-auto task-list-container pr-1"> {# Added pr-1 for scrollbar space #}
-
+        <div id="taskList" class="space-y-3 max-h-96 overflow-y-auto task-list-container pr-1">
             {% if filtered_tasks %}
                 <div class="bg-gray-700 p-4 rounded-lg shadow-md border border-gray-600">
                     <h3 class="text-lg text-gray-100 font-semibold mb-2">Filtered Tasks</h3>
@@ -116,7 +113,6 @@
                 {% for task in all_tasks %}
                     <div class="bg-gray-700 p-4 rounded-lg shadow-md border border-gray-600 task-item transition-all duration-300 hover:border-blue-500 {% if task.completed %}opacity-70{% endif %}">
                         <div class="flex items-start">
-                            {# Replaced checkbox with a form and button #}
                             <form action="{% url 'core:mark_complete' task.id %}" method="post" class="flex-shrink-0 mr-4">
                                 {% csrf_token %}
                                 <button type="submit"
@@ -138,9 +134,9 @@
                                 </div>
                             </div>
                             <div class="flex items-center ml-4 flex-shrink-0">
-                                <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors duration-200 text-xl" title="Edit Task">
+                                <button class="text-blue-400 hover:text-blue-300 transition-colors duration-200 text-xl edit-task-btn" data-task-id="{{ task.id }}" title="Edit Task">
                                     <i class="fas fa-edit"></i>
-                                </a>
+                                </button>
                                 <form action="{% url 'core:delete_task' task.id %}" method="post" class="ml-3">
                                     {% csrf_token %}
                                     <button type="submit" class="text-red-400 hover:text-red-300 transition-colors duration-200 text-xl" title="Delete Task">
@@ -160,6 +156,33 @@
     </div>
 </main>
 
+<!-- Edit Task Modal -->
+<div id="edit-task-modal" class="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center hidden z-50" style="backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);">
+    <div class="bg-gray-800 rounded-2xl p-6 w-full max-w-md shadow-xl border border-blue-700">
+        <h3 class="text-2xl font-orbitron font-semibold text-blue-400 mb-4">Edit Task</h3>
+        <form id="edit-task-form" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" id="edit-task-id" name="task_id">
+            <div>
+                <label for="edit-task-title" class="block text-sm font-semibold text-gray-300 mb-1">Task Title</label>
+                <input type="text" id="edit-task-title" name="title" class="w-full p-3 rounded-lg bg-gray-900 text-gray-100 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+                <label for="edit-task-description" class="block text-sm font-semibold text-gray-300 mb-1">Description</label>
+                <textarea id="edit-task-description" name="description" class="w-full p-3 rounded-lg bg-gray-900 text-gray-100 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 h-24"></textarea>
+            </div>
+            <div>
+                <label for="edit-task-due-date" class="block text-sm font-semibold text-gray-300 mb-1">Due Date</label>
+                <input type="date" id="edit-task-due-date" name="due_date" class="w-full p-3 rounded-lg bg-gray-900 text-gray-100 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div class="flex justify-end gap-4">
+                <button type="button" id="cancel-edit-task" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold shadow-md transition-colors duration-200">Cancel</button>
+                <button type="submit" id="save-edit-task" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow-md transition-colors duration-200">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const categorySelect = document.getElementById('category-input');
@@ -170,19 +193,14 @@
                 otherCategoryInput.classList.remove('hidden');
             } else {
                 otherCategoryInput.classList.add('hidden');
-                otherCategoryInput.value = ''; // Clear input when hidden
+                otherCategoryInput.value = '';
             }
         }
 
-        // Initial check on load in case "Other" is pre-selected (unlikely with static HTML)
         toggleOtherCategoryInput();
-
-        // Add event listener for when the select value changes
         categorySelect.addEventListener('change', toggleOtherCategoryInput);
 
-
-
-        // Highlight the active filter button based on the URL
+        // Filter button highlighting
         const filterButtons = document.querySelectorAll('.filter-btn');
         const query = window.location.search;
 
@@ -213,8 +231,6 @@
         }
 
         setActiveButton();
-
-        // Add click event to update active state immediately on click
         filterButtons.forEach(btn => {
             btn.addEventListener('click', function() {
                 filterButtons.forEach(b => {
@@ -223,14 +239,159 @@
                 });
                 btn.classList.add('bg-blue-600', 'text-white');
                 btn.classList.remove('bg-gray-600', 'text-gray-200');
-                // Let the browser follow the link after the style update
             });
         });
 
         const mySelect = document.querySelector('.mySelect');
         mySelect.addEventListener('change', function() {
-            document.querySelector('.select-form').submit(); // Submit the form when a category is selected
+            document.querySelector('.select-form').submit();
         });
+
+        // Edit Task Modal Logic
+        const editTaskButtons = document.querySelectorAll('.edit-task-btn');
+        const editTaskModal = document.getElementById('edit-task-modal');
+        const cancelEditTaskBtn = document.getElementById('cancel-edit-task');
+        const saveEditTaskBtn = document.getElementById('save-edit-task');
+        const editTaskForm = document.getElementById('edit-task-form');
+        const editTaskId = document.getElementById('edit-task-id');
+        const editTaskTitle = document.getElementById('edit-task-title');
+        const editTaskDescription = document.getElementById('edit-task-description');
+        const editTaskDueDate = document.getElementById('edit-task-due-date');
+
+        editTaskButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const taskId = this.getAttribute('data-task-id');
+                // Fetch task data from the view
+                fetch(`/edit-task/${taskId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        editTaskId.value = taskId;
+                        editTaskTitle.value = data.title || "";
+                        editTaskDescription.value = data.description || "";
+                        editTaskDueDate.value = data.due_date || "";
+                        editTaskModal.classList.remove('hidden');
+                        setTimeout(() => editTaskTitle.focus(), 200);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching task:', error);
+                        alert('Failed to load task details.');
+                    });
+            });
+        });
+
+        cancelEditTaskBtn.addEventListener('click', () => {
+            editTaskModal.classList.add('hidden');
+            editTaskForm.reset();
+        });
+
+        saveEditTaskBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const taskId = editTaskId.value;
+            const title = editTaskTitle.value;
+            const description = editTaskDescription.value;
+            const dueDate = editTaskDueDate.value;
+
+            if (!title) {
+                alert('Task title is required.');
+                return;
+            }
+
+            // Submit updated task data to backend
+            fetch(`/edit-task/${taskId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    title: title,
+                    description: description,
+                    due_date: dueDate,
+                    status: status
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Task updated successfully!');
+                    editTaskModal.classList.add('hidden');
+                    editTaskForm.reset();
+                    // Optionally reload the page or update the task list dynamically
+                    location.reload();
+                } else {
+                    alert(data.error || 'Failed to update task.');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating task:', error);
+                alert('An error occurred while updating the task.');
+            });
+        });
+
+        const generateBtn = document.getElementById('generateDescription');
+        const taskTitleInput = document.querySelector('input[name="task_text"]');
+        const taskDescriptionTextarea = document.querySelector('textarea[name="task_description"]');
+
+        generateBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const title = taskTitleInput.value.trim();
+            if (!title) {
+                alert('Please enter a task title first.');
+                return;
+            }
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generating...';
+
+            fetch("{% url 'core:generate_description' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ title: title })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    taskDescriptionTextarea.value = data.message;
+                } else if (data.description) {
+                    taskDescriptionTextarea.value = data.description;
+                } else {
+                    alert(data.error || 'Failed to generate description.');
+                }
+            })
+            .catch(() => {
+                alert('An error occurred while generating the description.');
+            })
+            .finally(() => {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="fas fa-magic mr-2"></i> Generate description';
+            });
+        });
+
+        // Close modal on outside click
+        document.addEventListener('mousedown', (e) => {
+            if (!editTaskModal.contains(e.target) && !editTaskModal.classList.contains('hidden')) {
+                editTaskModal.classList.add('hidden');
+                editTaskForm.reset();
+            }
+        });
+
+        // Helper function to get CSRF token (assuming it's in base.html)
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
     });
 </script>
 {% endblock %}

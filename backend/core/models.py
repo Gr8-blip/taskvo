@@ -12,6 +12,13 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+class Notifications(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    type = models.CharField(max_length=50, choices=[("reminder", "Reminder"), ("ping", "Ping"), ("nudge", "Nudge"), ("update", "Update")])
+    read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
 class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
@@ -24,3 +31,4 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
