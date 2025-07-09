@@ -1,0 +1,52 @@
+{
+  "memories": [
+    {
+      "id": 1,
+      "title": "First AI Thought",
+      "content": "Today I learned how to process natural language.",
+      "timestamp": "2024-06-10T09:00:00Z"
+    }
+  ],
+  "1": [
+    {
+      "role": "user",
+      "message": "Delete task Go to Walmart"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"delete\",\n  \"title\": \"Go to Walmart\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "Delete task #1"
+    },
+    {
+      "role": "ai",
+      "message": "{\"command\": \"none\", \"message\": \"Request failed with status code 503\"}"
+    },
+    {
+      "role": "user",
+      "message": "Delete task #1"
+    },
+    {
+      "role": "ai",
+      "message": "{\"command\": \"none\", \"message\": \"Request failed with status code 503\"}"
+    },
+    {
+      "role": "user",
+      "message": "Delete task with Id 1"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"delete\",\n  \"id\": 1\n}"
+    },
+    {
+      "role": "user",
+      "message": "delete task go to walmart"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"delete\",\n  \"title\": \"go to walmart\"\n}"
+    }
+  ]
+}

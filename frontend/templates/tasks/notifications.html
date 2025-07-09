@@ -1,0 +1,175 @@
+{% extends "tasks/base.html" %}
+
+{% block title %}Notification Center{% endblock %}
+
+{% block content %}
+<main class="flex-1 p-4 sm:p-8 overflow-auto">
+    <h2 class="text-4xl font-orbitron font-bold text-blue-400 mb-8 animate-fade-in-down text-center">Notification Center</h2>
+
+    <div class="flex flex-col p-6 bg-gray-800 rounded-2xl shadow-xl border border-blue-700 w-full max-w-5xl mx-auto space-y-6">
+
+        <!-- Header and Settings -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+            <h3 class="text-2xl font-semibold text-gray-100">Your Updates</h3>
+            <button id="settings-button" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md transition-colors duration-300 flex items-center justify-center">
+                <i class="fas fa-cog mr-2"></i> Personal Settings
+            </button>
+        </div>
+
+        <!-- Notification List Container -->
+        <div id="notification-list" class="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+            <!-- Notifications will be injected here by JavaScript -->
+        </div>
+
+        <!-- No Notifications Message -->
+        <p id="no-notifications-message" class="text-center text-gray-400 p-4 hidden">You're all caught up! No new notifications.</p>
+
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const notificationList = document.getElementById('notification-list');
+        const noNotificationsMessage = document.getElementById('no-notifications-message');
+        const settingsButton = document.getElementById('settings-button');
+
+        function fetchNotifications() {
+            fetch("{% url 'core:get_notifications' %}")
+                .then(response => response.json())
+                .then(data => renderNotifications(data))
+                .catch(err => console.error("Error fetching notifications:", err));
+        }
+
+        function renderNotifications(notifications) {
+            notificationList.innerHTML = '';
+
+            if (!notifications || notifications.length === 0) {
+                noNotificationsMessage.classList.remove('hidden');
+                return;
+            } else {
+                noNotificationsMessage.classList.add('hidden');
+            }
+
+            notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            notifications.forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.id = `notif-${notification.id}`;
+                const baseClasses = [
+                    'p-4', 'rounded-lg', 'shadow-md', 'border', 'flex', 'items-start', 'gap-4',
+                    'transition-all', 'duration-300', 'ease-in-out', 'bg-gray-700'
+                ];
+                const readState = notification.read
+                    ? 'border-gray-600 opacity-70 text-gray-400'
+                    : 'border-blue-600 hover:bg-gray-600 text-gray-100';
+
+                notificationElement.classList.add(...baseClasses, ...readState.split(' '));
+
+                let iconClass = '';
+                let typeColorClass = '';
+                switch (notification.type) {
+                    case 'update':
+                        iconClass = 'fas fa-info-circle text-blue-400';
+                        typeColorClass = 'bg-blue-800 text-blue-200';
+                        break;
+                    case 'reminder':
+                        iconClass = 'fas fa-bell text-yellow-400';
+                        typeColorClass = 'bg-yellow-800 text-yellow-200';
+                        break;
+                    case 'ping':
+                        iconClass = 'fas fa-comment-dots text-purple-400';
+                        typeColorClass = 'bg-purple-800 text-purple-200';
+                        break;
+                    case 'nudge':
+                        iconClass = 'fas fa-hand-point-right text-green-400';
+                        typeColorClass = 'bg-green-800 text-green-200';
+                        break;
+                    default:
+                        iconClass = 'fas fa-question-circle text-gray-400';
+                        typeColorClass = 'bg-gray-600 text-gray-300';
+                }
+
+                const date = new Date(notification.timestamp);
+                const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                const formattedTime = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+                notificationElement.innerHTML = `
+                    <div class="flex-shrink-0">
+                        <i class="${iconClass} text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-medium ${typeColorClass} px-2 py-0.5 rounded-full">${capitalize(notification.type)}</span>
+                            <span class="text-xs text-gray-400">${formattedDate} at ${formattedTime}</span>
+                        </div>
+                        <p class="text-lg font-medium mb-2 ${notification.read ? 'line-through text-gray-400' : 'text-gray-100'}">${notification.message}</p>
+                        <div class="flex gap-2">
+                            <button data-id="${notification.id}" class="mark-read-btn px-3 py-1 text-xs rounded-lg font-semibold transition-colors duration-200
+                                ${notification.read ? 'bg-gray-600 text-gray-300 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'}">
+                                <i class="fas fa-check mr-1"></i> ${notification.read ? 'Read' : 'Mark as Read'}
+                            </button>
+                            <button data-id="${notification.id}" class="dismiss-btn px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold shadow-md transition-colors duration-200">
+                                <i class="fas fa-times mr-1"></i> Dismiss
+                            </button>
+                        </div>
+                    </div>
+                `;
+                notificationList.appendChild(notificationElement);
+            });
+
+            addNotificationEventListeners();
+        }
+
+        function addNotificationEventListeners() {
+            document.querySelectorAll('.mark-read-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = button.dataset.id;
+                    fetch(`/notifications/mark/${id}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": getCookie('csrftoken')
+                        }
+                    }).then(() => fetchNotifications());
+                });
+            });
+            console.log("Token:", getCookie('csrftoken'));
+
+            document.querySelectorAll('.dismiss-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = this.dataset.id;
+                    fetch(`/notifications/delete/${id}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": getCookie('csrftoken')
+                        }
+                    }).then(() => fetchNotifications());
+                });
+            });
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function capitalize(word) {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        }
+
+        settingsButton.addEventListener('click', function () {
+            alert('Personal Settings functionality would go here!');
+        });
+
+        fetchNotifications();
+    });
+</script>
+{% endblock %}

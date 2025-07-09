@@ -1,0 +1,437 @@
+{% extends "tasks/base.html" %}
+
+{% block title %}TaskVO Calendar{% endblock %}
+
+{% block content %}
+<head>
+    <!-- Essential for responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Orbitron for titles, Roboto for general text -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for FullCalendar to match the dark theme and professional look */
+        /* Applying Inter font as per general instruction, while keeping Orbitron and Roboto for specific elements as per user's original code. */
+        body {
+            font-family: 'Inter', sans-serif; /* Default body font */
+        }
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .font-roboto {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* FullCalendar table borders and background */
+        .fc .fc-view-harness-active > .fc-view {
+            border: none; /* Remove default FullCalendar view border */
+        }
+
+        /* Day grid cells */
+        .fc .fc-daygrid-day {
+            background-color: #1f2937; /* gray-800 for day cells */
+            border: 1px solid #374151; /* gray-700 border */
+            border-radius: 0.5rem; /* Rounded corners for cells */
+            margin: 0.1rem; /* Small margin between cells */
+            transition: background-color 0.2s ease-in-out;
+            position: relative; /* For task count badge positioning */
+            padding-bottom: 2rem; /* Give space for tasks at the bottom */
+        }
+
+        .fc .fc-daygrid-day:hover {
+            background-color: #374151; /* gray-700 on hover */
+        }
+
+        /* Current day highlight */
+        .fc .fc-daygrid-day.fc-day-today {
+            background-color: #1e40af; /* blue-800 for today */
+            border-color: #3b82f6; /* blue-600 border for today */
+        }
+
+        /* Day numbers */
+        .fc .fc-daygrid-day-top {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0.5rem;
+            color: #d1d5db; /* gray-300 for day numbers */
+            font-weight: 600;
+        }
+
+        /* Day names (Mon, Tue, etc.) */
+        .fc .fc-col-header-cell-cushion {
+            color: #60a5fa; /* blue-400 for day names */
+            font-weight: 700;
+            padding: 0.75rem 0;
+            text-transform: uppercase;
+            font-size: 0.875rem; /* text-sm */
+        }
+
+        /* Event styling - already mostly handled by FullCalendar options, but adding some fine-tuning */
+        .fc-event {
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.25rem 0.5rem; /* py-1 px-2 */
+            margin-bottom: 0.25rem; /* mb-1 */
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem;
+            background-color: #1e3a8a !important; /* blue-900 */
+            border-color: #3b82f6 !important; /* blue-600 */
+            color: #e5e7eb !important; /* gray-200 */
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+        }
+
+        .fc-event.fc-event-dragging {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+        }
+
+        .fc-event-title-container {
+            flex-grow: 1;
+        }
+
+        /* More link */
+        .fc-daygrid-more-link {
+            color: #60a5fa !important; /* blue-400 */
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        .fc-daygrid-more-link:hover {
+            text-decoration: underline;
+            color: #93c5fd !important; /* blue-300 */
+        }
+
+        /* Scrollbar styling for main content */
+        main::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        main::-webkit-scrollbar-track {
+            background: #1f2937; /* gray-800 */
+            border-radius: 10px;
+        }
+
+        main::-webkit-scrollbar-thumb {
+            background: #4b5563; /* gray-600 */
+            border-radius: 10px;
+        }
+
+        main::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* gray-500 */
+        }
+
+        /* Custom select arrow styling */
+        .select-form select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'%3e%3cpath d='M7 8l3 3 3-3' stroke='%239ca3af' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em 1.5em;
+        }
+        .select-form .pointer-events-none {
+            display: none; /* Hide the Font Awesome icon, as we're using background-image */
+        }
+    </style>
+</head>
+
+<main class="flex-1 p-4 sm:p-8 overflow-auto">
+    <h2 class="text-4xl font-orbitron font-bold text-blue-400 mb-8 animate-fade-in-down text-center tracking-tight drop-shadow-lg">
+        Your Task Calendar
+    </h2>
+
+    <div
+        class="flex flex-col bg-gray-900 rounded-2xl shadow-2xl border border-blue-700 w-full max-w-6xl mx-auto space-y-8 p-6 sm:p-10">
+        <!-- Header: Month Navigation and Category Filter -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
+            <!-- Navigation -->
+            <a href="?year={{ prev_year }}&month={{ prev_month }}"
+            class="flex items-center px-5 py-2 rounded-xl bg-gray-800 text-gray-200 hover:bg-blue-700 hover:text-white font-semibold text-base transition-all duration-300 shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+            <i class="fas fa-chevron-left mr-2"></i> Previous
+            </a>
+
+            <span class="text-3xl font-orbitron font-extrabold text-blue-300 tracking-wide">
+                {{ display_date|date:"F Y" }}
+            </span>
+
+            <a href="?year={{ next_year }}&month={{ next_month }}"
+            class="flex items-center px-5 py-2 rounded-xl bg-gray-800 text-gray-200 hover:bg-blue-700 hover:text-white font-semibold text-base transition-all duration-300 shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+            Next <i class="fas fa-chevron-right ml-2"></i>
+            </a>
+            <!-- Category Filter -->
+            <div class="relative w-full sm:w-72">
+                <form action="" class="select-form" method="get">
+                    {% csrf_token %}
+                    <select
+                        class="w-full p-3 rounded-xl bg-gray-800 text-gray-100 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 text-lg font-roboto appearance-none pr-10 shadow-inner"
+                        name="category_filter" id="category-filter">
+                        <option value="all" class="bg-gray-800 text-gray-200">Filter by Category</option>
+                        <option value="Work" class="bg-gray-800 text-gray-200">Work</option>
+                        <option value="Personal" class="bg-gray-800 text-gray-200">Personal</option>
+                        <option value="Health" class="bg-gray-800 text-gray-200">Health</option>
+                        <option value="Finance" class="bg-gray-800 text-gray-200">Finance</option>
+                        <option value="Study" class="bg-gray-800 text-gray-200">Study</option>
+                        <option value="Other" class="bg-gray-800 text-gray-200">Other</option>
+                    </select>
+                    <!-- Custom arrow replaced by background-image in CSS -->
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                        <i class="fas fa-chevron-down text-base"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Calendar Container -->
+        <div id="calendar" class="bg-gray-800 p-6 rounded-2xl shadow-inner border border-gray-700"></div>
+
+        <!-- Task Modal -->
+        <div id="task-modal"
+            class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 transition-opacity duration-300 opacity-0">
+            <div
+                class="bg-gray-900 p-6 sm:p-8 rounded-2xl shadow-2xl border border-blue-700 w-full max-w-lg transform transition-all duration-300 scale-90">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="text-2xl font-orbitron font-bold text-blue-400">Task Details</h3>
+                    <button id="modal-close"
+                        class="text-gray-400 hover:text-blue-400 text-2xl focus:outline-none transition-colors duration-200"
+                        aria-label="Close Modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="modal-content" class="space-y-4 text-gray-200 font-roboto">
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                        <strong class="text-sm font-semibold text-gray-300 w-20 flex-shrink-0">Title:</strong>
+                        <span id="modal-title" class="text-base font-medium flex-grow break-words"></span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                        <strong class="text-sm font-semibold text-gray-300 w-20 flex-shrink-0">Description:</strong>
+                        <span id="modal-description" class="text-base font-medium flex-grow break-words"></span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                        <strong class="text-sm font-semibold text-gray-300 w-20 flex-shrink-0">Category:</strong>
+                        <span id="modal-category" class="text-base font-medium flex-grow"></span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                        <strong class="text-sm font-semibold text-gray-300 w-20 flex-shrink-0">Due Date:</strong>
+                        <span id="modal-due-date" class="text-base font-medium flex-grow"></span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                        <strong class="text-sm font-semibold text-gray-300 w-20 flex-shrink-0">Status:</strong>
+                        <span id="modal-status" class="text-base font-medium flex-grow"></span>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-end gap-3 mt-8">
+                    <form action="/mark_complete/0/" method="post" id="modal-complete-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="w-full sm:w-auto px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold text-sm shadow-md transition-all duration-200 flex items-center justify-center transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75">
+                            <i class="fas fa-check mr-2"></i> Mark Complete
+                        </button>
+                    </form>
+                    <form action="/delete_task/0/" method="post" id="modal-delete-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="w-full sm:w-auto px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold text-sm shadow-md transition-all duration-200 flex items-center justify-center transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
+                            <i class="fas fa-trash mr-2"></i> Delete
+                        </button>
+                    </form>
+                    <button id="modal-edit"
+                        class="w-full sm:w-auto px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm shadow-md transition-all duration-200 flex items-center justify-center transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+                        <i class="fas fa-edit mr-2"></i> Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Functionality Coming Soon Modal -->
+        <div id="edit-coming-soon-modal"
+             class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50 transition-opacity duration-300 opacity-0">
+            <div class="bg-gray-900 p-6 sm:p-8 rounded-2xl shadow-2xl border border-blue-700 w-full max-w-sm transform transition-all duration-300 scale-90 text-center">
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="text-xl font-orbitron font-bold text-blue-400">Heads Up!</h3>
+                    <button id="edit-modal-close"
+                            class="text-gray-400 hover:text-blue-400 text-xl focus:outline-none transition-colors duration-200"
+                            aria-label="Close Edit Info Modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <p class="text-gray-200 font-roboto text-base mb-6">
+                    Edit functionality is coming soon! Stay tuned for updates.
+                </p>
+                <button id="edit-modal-ok"
+                        class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-sm shadow-md transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+                    Got It!
+                </button>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // FullCalendar Initialization and Task Loading
+        async function loadTasks() {
+            try {
+                const response = await fetch('{% url "core:calendar" %}');
+                if (!response.ok) {
+                    console.error(`HTTP error! Status: ${response.status}, Response: ${await response.text()}`);
+                    throw new Error(`Failed to fetch tasks: ${response.statusText}`);
+                }
+                const data = await response.json();
+                // console.log("Raw tasks data received from backend:", data); // Removed debug log
+
+                const calendarEl = document.getElementById('calendar');
+                if (!calendarEl) {
+                    console.error("Calendar element not found! Make sure 'calendar' ID exists in HTML.");
+                    return;
+                }
+
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    initialDate: '{{ display_date|date:"Y-m-d" }}',
+                    events: data, // Using data directly as confirmed working
+                    eventBackgroundColor: '#1e3a8a', // blue-900
+                    eventBorderColor: '#3b82f6', // blue-600
+                    eventTextColor: '#e5e7eb', // gray-200
+                    headerToolbar: false,
+                    height: 'auto',
+                    dayMaxEventRows: 3,
+                    moreLinkClassNames: ['text-blue-400', 'hover:text-blue-300', 'font-semibold'],
+                    eventContent: function (info) {
+                        return {
+                            html: `
+                                <div class="p-1 text-sm font-roboto truncate">
+                                    <span class="${info.event.extendedProps.completed ? 'line-through text-gray-400' : 'text-gray-100'}">${info.event.title}</span>
+                                </div>
+                            `
+                        };
+                    },
+                    dayHeaderContent: function (arg) {
+                        return { html: `<span class="text-blue-300 font-roboto text-sm uppercase">${arg.text}</span>` };
+                    },
+                    eventMouseEnter: function (info) {
+                        info.el.title = `${info.event.title}\n${info.event.extendedProps.description}\nCategory: ${info.event.extendedProps.category}`;
+                    },
+                    eventClick: function (info) {
+                        // console.log('Event clicked:', info.event); // Removed debug log
+                        document.getElementById('modal-title').textContent = info.event.title;
+                        document.getElementById('modal-description').textContent = info.event.extendedProps.description || 'No description';
+                        document.getElementById('modal-category').textContent = info.event.extendedProps.category || 'Uncategorized';
+                        document.getElementById('modal-due-date').textContent = new Date(info.event.start).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                        document.getElementById('modal-status').textContent = info.event.extendedProps.completed ? 'Completed' : 'Pending';
+
+                        // Update form actions with the correct task ID
+                        document.getElementById('modal-complete-form').action = `/mark_complete/${info.event.id}/`;
+                        document.getElementById('modal-delete-form').action = `/delete_task/${info.event.id}/`;
+
+                        const modal = document.getElementById('task-modal');
+                        modal.classList.remove('hidden');
+                        // Trigger fade-in and scale-up animation
+                        setTimeout(() => {
+                            modal.classList.remove('opacity-0');
+                            modal.querySelector('div').classList.remove('scale-90');
+                            modal.querySelector('div').classList.add('scale-100');
+                        }, 10);
+                    }
+                });
+
+                // Render the calendar after all configurations
+                calendar.render();
+
+
+            
+
+                // Category filter
+                document.getElementById('category-filter').addEventListener('change', function () {
+                    const selectedCategory = this.value;
+                    if (selectedCategory === 'all') {
+                        calendar.setOption('events', data); // Filter original 'data' array
+                    } else {
+                        const filteredEvents = data.filter(event => event.category === selectedCategory);
+                        calendar.setOption('events', filteredEvents);
+                    }
+                    // console.log("Filtered events (after parsing):", filteredEvents); // Removed debug log
+                });
+
+            } catch (error) {
+                console.error("Error loading tasks or initializing calendar:", error);
+                const calendarEl = document.getElementById('calendar');
+                if (calendarEl) {
+                    calendarEl.innerHTML = `<div class="text-red-500 text-center p-4 font-roboto">Failed to load calendar data. Please check your internet connection and try again later. If the problem persists, contact support.</div>`;
+                }
+            }
+        }
+
+        // Load tasks and initialize calendar
+        loadTasks();
+
+        // Modal close buttons (Task Modal)
+        document.getElementById('modal-close').addEventListener('click', function () {
+            const modal = document.getElementById('task-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.remove('scale-100');
+            modal.querySelector('div').classList.add('scale-90');
+            setTimeout(() => modal.classList.add('hidden'), 300); // Hide after transition
+        });
+
+        // Close Task Modal on outside click
+        document.getElementById('task-modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                this.classList.add('opacity-0');
+                this.querySelector('div').classList.remove('scale-100');
+                this.querySelector('div').classList.add('scale-90');
+                setTimeout(() => this.classList.add('hidden'), 300);
+            }
+        });
+
+        // Edit Functionality Coming Soon Modal Logic
+        const editComingSoonModal = document.getElementById('edit-coming-soon-modal');
+        const editModalCloseBtn = document.getElementById('edit-modal-close');
+        const editModalOkBtn = document.getElementById('edit-modal-ok');
+        const modalEditBtn = document.getElementById('modal-edit');
+
+        function showEditComingSoonModal() {
+            editComingSoonModal.classList.remove('hidden');
+            setTimeout(() => {
+                editComingSoonModal.classList.remove('opacity-0');
+                editComingSoonModal.querySelector('div').classList.remove('scale-90');
+                editComingSoonModal.querySelector('div').classList.add('scale-100');
+            }, 10);
+        }
+
+        function hideEditComingSoonModal() {
+            editComingSoonModal.classList.add('opacity-0');
+            editComingSoonModal.querySelector('div').classList.remove('scale-100');
+            editComingSoonModal.querySelector('div').classList.add('scale-90');
+            setTimeout(() => editComingSoonModal.classList.add('hidden'), 300);
+        }
+
+        modalEditBtn.addEventListener('click', showEditComingSoonModal);
+        editModalCloseBtn.addEventListener('click', hideEditComingSoonModal);
+        editModalOkBtn.addEventListener('click', hideEditComingSoonModal);
+
+        // Close Edit Coming Soon Modal on outside click
+        editComingSoonModal.addEventListener('click', function (e) {
+            if (e.target === this) {
+                hideEditComingSoonModal();
+            }
+        });
+
+        // Initial filter application if a category is pre-selected (e.g., from query params)
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialCategory = urlParams.get('category_filter');
+        if (initialCategory) {
+            const selectElement = document.getElementById('category-filter');
+            if (selectElement) {
+                selectElement.value = initialCategory;
+            }
+        }
+    });
+</script>
+{% endblock %}

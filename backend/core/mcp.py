@@ -18,7 +18,7 @@ def ai_response(user_message):
     }
 
     data = {
-        "model": "mistralai/mistral-7b-instruct",  # 🆕 W model
+        "model": "mistralai/mixtral-8x7b-instruct", 
         "messages": [
             {"role": "system", "content": f"{behavior}"},
             {"role": "user", "content": f"{user_message}"}
