@@ -67,6 +67,7 @@ def clean_ai_json(raw_response):
 
 @login_required(login_url='users:login')
 def ai_command(request):
+    current_plan = request.user.profile.plan_type
     if request.method == "POST":
         data = json.loads(request.body)
         user_message = data.get('user_message')
@@ -144,23 +145,40 @@ def ai_command(request):
         if command == "none" and message:
             return JsonResponse({'message': f'{message}'})
         elif command == "add-multiple":
+            if current_plan == "free":
+                return JsonResponse({"message": "Please upgrade to pro to add bulk tasks"})
             tasks = ai_data.get("tasks", [])
             if len(tasks) > 50:
                 return JsonResponse({"message": "Woahh slow down! I can only handle 50 tasks at a time 😅"})
             for task in tasks:
                 title = task.get("title")
                 due = task.get("due", "today")
+                category_name = task.get("category")
+                description = task.get("description", "")
                 if title:
                     due_date = timezone.now()
                     if due == "tomorrow":
                         due_date += timedelta(days=1)
                     elif due == "yesterday":
                         due_date -= timedelta(days=1)
-                    
-                    Task.objects.create(user=request.user, title=title, due_date=due_date)
+                    category = Category.objects.create(
+                        user=request.user,
+                        name=category_name,
+                        is_others=False if category_name != "Other" else True
+                    )
+                    Task.objects.create(
+                        user=request.user,
+                        title=title,
+                        due_date=due_date,
+                        category=category,
+                        description=description
+                    )
             return JsonResponse({"message": f"{len(tasks)} task(s) added!"})
         elif command == "add" and title:
-            description = ai_data.get("description")
+            if current_plan == "pro":
+                description = ai_data.get("description")
+            else:
+                description = "Upgrade to Pro to automatically generate a task description."
             category_name = ai_data.get("category")
             due_date = timezone.now()
             if due == "tomorrow":
@@ -229,6 +247,11 @@ def ai_command(request):
 def home(request):
     return render(request, "core/index.html")
 
+def payment_page(request):
+    email = request.user.email
+    
+    return render(request, "core/payment.html", {"email": email})
+
 def ai_center(request):
     return render(request, "tasks/ai.html")
 
@@ -269,6 +292,7 @@ def weekly_chart(request):
 def dashboard(request):
     user = request.user
     today = today = date.today()
+    current_plan = request.user.profile.plan_type
     tasks_left_today = Task.objects.filter(user=user, completed=False).filter(due_date__date=today).count()
     
         
@@ -293,13 +317,16 @@ def dashboard(request):
         "progress": progress,          # your progress logic
         "today_completed_tasks": today_completed_tasks,
         "todays_tasks": todays_tasks,
-        "daily_quote": quote
+        "daily_quote": quote,
+        "current_plan": current_plan,
     }
     return render(request, "tasks/dashboard.html", context)
 
 
 @login_required(login_url='users:login')
 def tasks(request):
+    current_plan = request.user.profile.plan_type
+    
     category_name = request.POST.get("category_filter")
 
     is_completed_or_pending = request.GET.get("filter")
@@ -357,7 +384,7 @@ def tasks(request):
     is_others_category = Category.objects.filter(is_others=True).filter(user=request.user)
     duplicates_removed = list({cat.name: cat for cat in is_others_category}.values())
 
-    return render(request, "tasks/tasks.html", {"all_tasks": all_tasks, "duplicates_removed": duplicates_removed, "category_name": category_name})
+    return render(request, "tasks/tasks.html", {"all_tasks": all_tasks, "duplicates_removed": duplicates_removed, "category_name": category_name, "current_plan": current_plan})
 
 @login_required(login_url='users:login')
 def mark_complete(request, task_id):
@@ -411,13 +438,15 @@ def delete_notification(request, notification_id):
 @login_required(login_url='users:login')
 def notification(request):
     notifications = Notifications.objects.filter(user=request.user)
-    return render(request, "tasks/notifications.html", {"notifications": notifications})
+    current_plan = request.user.profile.plan_type
+    return render(request, "tasks/notifications.html", {"notifications": notifications, 'current_plan': current_plan})
 
 @login_required(login_url='users:login')
 def calendar(request):
     # Filter tasks for the currently logged-in user
     # and exclude tasks where due_date is None
     tasks = Task.objects.filter(user=request.user).exclude(due_date=None)
+    
     event_list = []
     for task in tasks:
         # Ensure category name is sent, or None if category is not set
@@ -437,6 +466,8 @@ def calendar(request):
 def calendar_page(request):
     year = int(request.GET.get('year', datetime.now().year))
     month = int(request.GET.get('month', datetime.now().month))
+    current_plan = request.user.profile.plan_type
+    
 
     # 👇 This creates a datetime object just for the first of that month
     display_date = datetime(year, month, 1)
@@ -447,12 +478,15 @@ def calendar_page(request):
         'prev_year': year if month > 1 else year - 1,
         'next_month': (month + 1) if month < 12 else 1,
         'next_year': year if month < 12 else year + 1,
+        'current_plan': current_plan,
     }
     return render(request, "tasks/calendar.html", context)
 
 @login_required(login_url='users:login')
 def settings(request):
     user = request.user
+    current_plan = request.user.profile.plan_type
+    
     # Profile edit
     
     username = request.POST.get("name")
@@ -474,4 +508,4 @@ def settings(request):
             user.email = email
             user.save()
             return redirect("core:dashboard")
-    return render(request, "tasks/settings.html")
+    return render(request, "tasks/settings.html", {"current_plan": current_plan})

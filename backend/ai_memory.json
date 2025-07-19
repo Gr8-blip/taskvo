@@ -48,5 +48,107 @@
       "role": "ai",
       "message": " {\n  \"command\": \"delete\",\n  \"title\": \"go to walmart\"\n}"
     }
+  ],
+  "2": [
+    {
+      "role": "user",
+      "message": "hi"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hey! Ready to tackle your tasks?\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "add a task go do homework today"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add\",\n  \"title\": \"Go do homework\",\n  \"description\": \"Complete homework assignments.\",\n  \"category\": \"Study\",\n  \"due\": \"today\"\n}"
+    }
+  ],
+  "7": [
+    {
+      "role": "user",
+      "message": "what's good"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hey! Ready to tackle your tasks?\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "hi?"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hey! Ready to tackle your tasks?\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "What are you doing right now?"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Just processing your commands and generating JSON objects based on your instructions!\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "Okay"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Sure thing!\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "please add 5 random tasks"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add-multiple\",\n  \"tasks\": [\n    {\"title\": \"Task 1\", \"description\": \"A randomly generated task.\", \"category\": \"Miscellaneous\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 2\", \"description\": \"Another randomly generated task.\", \"category\": \"Personal\", \"due\": \"today\"},\n    {\"title\": \"Task 3\", \"description\": \"A completely arbitrary task.\", \"category\": \"Work\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 4\", \"description\": \"A random duty to be done.\", \"category\": \"Other\", \"due\": \"yesterday\"},\n    {\"title\": \"Task 5\", \"description\": \"A newly generated task.\", \"category\": \"Study\", \"due\": \"today\"}\n  ]\n}"
+    }
+  ],
+  "8": [
+    {
+      "role": "user",
+      "message": "please add 5 random tasks"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add-multiple\",\n  \"tasks\": [\n    {\"title\": \"Task 1\", \"description\": \"A random task for practice.\", \"category\": \"Miscellaneous\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 2\", \"description\": \"Another random task for the list.\", \"category\": \"Personal\", \"due\": \"today\"},\n    {\"title\": \"Task 3\", \"description\": \"A task to test the JSON response.\", \"category\": \"Work\", \"due\": \"yesterday\"},\n    {\"title\": \"Task 4\", \"description\": \"A random task example.\", \"category\": \"Study\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 5\", \"description\": \"A practice task for the user.\", \"category\": \"Hobbies\", \"due\": \"today\"}\n  ]\n}"
+    },
+    {
+      "role": "user",
+      "message": "please add 5 random tasks"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add-multiple\",\n  \"tasks\": [\n    {\"title\": \"Task 1\", \"description\": \"Description for task 1\", \"category\": \"Personal\", \"due\": \"today\"},\n    {\"title\": \"Task 2\", \"description\": \"Description for task 2\", \"category\": \"Work\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 3\", \"description\": \"Description for task 3\", \"category\": \"Finance\", \"due\": \"today\"},\n    {\"title\": \"Task 4\", \"description\": \"Description for task 4\", \"category\": \"Health\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 5\", \"description\": \"Description for task 5\", \"category\": \"Study\", \"due\": \"today\"}\n  ]\n}"
+    },
+    {
+      "role": "user",
+      "message": "please add a task do homework"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add\",\n  \"title\": \"Do homework\",\n  \"description\": \"Complete assigned tasks for school.\",\n  \"category\": \"Study\",\n  \"due\": \"tomorrow\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "please add a task do homework"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add\",\n  \"title\": \"Do homework\",\n  \"description\": \"Complete assigned tasks for the day.\",\n  \"category\": \"Study\",\n  \"due\": \"tomorrow\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "please add 5 random tasks"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add-multiple\",\n  \"tasks\": [\n    {\"title\": \"Task 1\", \"description\": \"Description for task 1\", \"category\": \"Personal\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 2\", \"description\": \"Description for task 2\", \"category\": \"Work\", \"due\": \"today\"},\n    {\"title\": \"Task 3\", \"description\": \"Description for task 3\", \"category\": \"Study\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 4\", \"description\": \"Description for task 4\", \"category\": \"Health\", \"due\": \"today\"},\n    {\"title\": \"Task 5\", \"description\": \"Description for task 5\", \"category\": \"Finance\", \"due\": \"yesterday\"}\n  ]\n}"
+    }
   ]
 }
