@@ -25,10 +25,15 @@ PROJECT_BASE = Path(__file__).resolve().parent.parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
+if os.getenv("RENDER") is None:
+    load_dotenv(os.path.join(BASE_DIR, ".env"))
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+PAYSTACK_SECRET_KEY = 'sk_test_5b65730b38937915fd77f730d6904fe1dcb97ceb'
 
 ALLOWED_HOSTS = ['*']
 
