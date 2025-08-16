@@ -52,30 +52,46 @@
   "2": [
     {
       "role": "user",
-      "message": "hi"
+      "message": "hello?"
     },
     {
       "role": "ai",
-      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hey! Ready to tackle your tasks?\"\n}"
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hello! How can I assist you with your tasks today?\"\n}"
     },
     {
       "role": "user",
-      "message": "add a task go do homework today"
+      "message": "What's up with you today?"
     },
     {
       "role": "ai",
-      "message": " {\n  \"command\": \"add\",\n  \"title\": \"Go do homework\",\n  \"description\": \"Complete homework assignments.\",\n  \"category\": \"Study\",\n  \"due\": \"today\"\n}"
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hello! How can I help you with your tasks today?\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "So can you act on my this memory"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"I'm here to help! Could you please specify the action you'd like me to take, like adding a task or fetching history?\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "Can you code?"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Absolutely, I can help with productivity tasks! How can I assist you today?\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "Code a site with HTML, CSS, AND JS"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add\",\n  \"title\": \"Code a site\",\n  \"description\": \"Develop a personal or professional website using HTML, CSS, and JavaScript.\",\n  \"category\": \"Work\",\n  \"due\": \"today\"\n}"
     }
   ],
   "7": [
-    {
-      "role": "user",
-      "message": "what's good"
-    },
-    {
-      "role": "ai",
-      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hey! Ready to tackle your tasks?\"\n}"
-    },
     {
       "role": "user",
       "message": "hi?"
@@ -107,6 +123,14 @@
     {
       "role": "ai",
       "message": " {\n  \"command\": \"add-multiple\",\n  \"tasks\": [\n    {\"title\": \"Task 1\", \"description\": \"A randomly generated task.\", \"category\": \"Miscellaneous\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 2\", \"description\": \"Another randomly generated task.\", \"category\": \"Personal\", \"due\": \"today\"},\n    {\"title\": \"Task 3\", \"description\": \"A completely arbitrary task.\", \"category\": \"Work\", \"due\": \"tomorrow\"},\n    {\"title\": \"Task 4\", \"description\": \"A random duty to be done.\", \"category\": \"Other\", \"due\": \"yesterday\"},\n    {\"title\": \"Task 5\", \"description\": \"A newly generated task.\", \"category\": \"Study\", \"due\": \"today\"}\n  ]\n}"
+    },
+    {
+      "role": "user",
+      "message": "Hello me taskVO speaking"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hello! How can I help you with your tasks?\"\n}"
     }
   ],
   "8": [
