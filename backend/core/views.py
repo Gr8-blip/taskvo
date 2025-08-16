@@ -6,6 +6,7 @@ from .mcp import ai_response
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required
 from .models import Task, Category, Notifications
+from users.models import CustomUser, NotificationType
 from .memory import load_memory, save_memory, is_task_query, is_prompt_query, get_last_task, get_last_prompts
 from datetime import date, datetime
 from django.utils.timezone import now
@@ -341,6 +342,12 @@ def tasks(request):
     
     if query:
         all_tasks = Task.objects.filter(title__icontains=query).filter(user=request.user)
+
+    now_date = timezone.now().date()
+    for task in all_tasks:
+        task.is_due = False
+        if task.due_date and not task.completed and task.due_date.date() < now_date:
+            task.is_due = True
         
         
 
@@ -494,6 +501,9 @@ def settings(request):
     current_password = request.POST.get("current-password")
     new_password = request.POST.get("new-password")
     confirm_password = request.POST.get("confirm-password")
+    notif_type = request.POST.getlist("type")
+
+    notification_frequency = request.POST.get("notif-frequency")
     
     if request.method == "POST":
         if new_password:
@@ -503,6 +513,15 @@ def settings(request):
                 return redirect("core:dashboard")
             else:
                 return redirect("core:settings")
+            
+        if notification_frequency:
+            if notif_type:
+                notification_type = NotificationType.objects.create(notif_type=notif_type)
+                user.profile.notif_type = notification_type
+                user.profile.save()
+            user.profile.notif_frequency = notification_frequency
+            user.profile.save()
+            return redirect("core:dashboard")
         else:
             user.username = username
             user.email = email
