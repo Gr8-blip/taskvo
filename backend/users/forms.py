@@ -1,11 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import CustomUser
-# from .models import CustomUser
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={"placeholder": "Your email"}))
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={"placeholder": "Your email"})
+    )
 
     class Meta:
         model = User
@@ -18,16 +19,7 @@ class RegisterForm(UserCreationForm):
         user = super().save(commit=False)
         user.email = self.cleaned_data.get("email")
         if commit:
-            try:
-                user.save()
-                CustomUser.objects.get_or_create(
-                    user=user,
-                    defaults={'plan_type': 'free'}
-                )
-                print("User and CustomUser created successfully")  # Debug
-            except Exception as e:
-                print(f"Error creating CustomUser: {e}")
-                raise
+            user.save()
         return user
 
     def clean(self):

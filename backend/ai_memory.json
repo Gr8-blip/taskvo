@@ -10,22 +10,6 @@
   "1": [
     {
       "role": "user",
-      "message": "Delete task Go to Walmart"
-    },
-    {
-      "role": "ai",
-      "message": " {\n  \"command\": \"delete\",\n  \"title\": \"Go to Walmart\"\n}"
-    },
-    {
-      "role": "user",
-      "message": "Delete task #1"
-    },
-    {
-      "role": "ai",
-      "message": "{\"command\": \"none\", \"message\": \"Request failed with status code 503\"}"
-    },
-    {
-      "role": "user",
       "message": "Delete task #1"
     },
     {
@@ -47,6 +31,22 @@
     {
       "role": "ai",
       "message": " {\n  \"command\": \"delete\",\n  \"title\": \"go to walmart\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "YO taskVo please generate a description for this task: Finish project review"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"describe\",\n  \"title\": \"Finish project review\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "Hi"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hello! How can I help you with your tasks today?\"\n}"
     }
   ],
   "2": [

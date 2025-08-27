@@ -21,6 +21,9 @@ class Command(BaseCommand):
                     completed=False,
                     is_due=False
                 )
+                self.stdout.write(f"Checking user: {custom_user.user.email}, freq: {custom_user.notif_frequency}, notif_type: {notif_type}")
+
+                self.stdout.write(f"Found {due_tasks.count()} due tasks for {custom_user.user.email}")
                 for task in due_tasks:
                     # Send email if enabled
                     if 'email' in notif_type:

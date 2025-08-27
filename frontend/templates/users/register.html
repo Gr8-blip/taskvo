@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,6 +61,23 @@
                 Already have an account? 
                 <a href="{% url 'users:login' %}" class="text-blue-600 hover:underline font-medium">Login</a>
             </p>
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="bg-white px-2 text-gray-500">Or continue with</span>
+                </div>
+                </div>
+
+                <!-- Google Login Button -->
+                <a href="{% provider_login_url 'google' %}"
+                class="flex items-center justify-center w-full gap-3 border border-gray-300 rounded-lg px-6 py-3 font-medium text-gray-700 bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" 
+                        alt="Google" class="w-5 h-5">
+                    <span>Sign up with Google</span>
+                </a>
+            </div>
         </div>
     </section>
     <script src="https://cdn.tailwindcss.com"></script>
