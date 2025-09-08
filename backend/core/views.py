@@ -1,12 +1,14 @@
 import json
 import requests
+from django.utils.timezone import make_aware
+import zoneinfo
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .mcp import ai_response
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required
 from .models import Task, Category, Notifications
-from users.models import CustomUser, NotificationType
+from users.models import NotificationType
 from .memory import load_memory, save_memory, is_task_query, is_prompt_query, get_last_task, get_last_prompts
 from datetime import date, datetime
 from django.utils.timezone import now
@@ -14,9 +16,8 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models.functions import TruncDay
 from django.db.models import Count
+from .google_calendar import create_event, update_event, delete_event
 
-
-# Create your views here.
 FALLBACK_JSON = {
     "command": "none",
     "message": "Sorry, I can't help with that 😅 I'm TaskVO — your friendly productivity assistant! Try saying something like: 'Remind me to do my homework tomorrow 🧠'"
@@ -167,13 +168,15 @@ def ai_command(request):
                         name=category_name,
                         is_others=False if category_name != "Other" else True
                     )
-                    Task.objects.create(
+                    new_task = Task.objects.create(
                         user=request.user,
                         title=title,
                         due_date=due_date,
                         category=category,
                         description=description
                     )
+                    create_event(new_task, request.user)
+                    
             return JsonResponse({"message": f"{len(tasks)} task(s) added!"})
         elif command == "add" and title:
             if current_plan == "pro":
@@ -192,7 +195,8 @@ def ai_command(request):
                 name=category_name,
                 is_others=False if category_name != "Other" else True
             )
-            Task.objects.create(user=request.user, title=title, description=description, category=category, due_date=due_date)
+            new_task = Task.objects.create(user=request.user, title=title, description=description, category=category, due_date=due_date)
+            create_event(new_task, request.user)
             return JsonResponse({'message': f'Task "{title}" added for {due}'})
         elif command == "delete":
             if task_id:
@@ -243,7 +247,6 @@ def ai_command(request):
             return JsonResponse({"message": "That wasn't a task. Try asking me to add something!"})
     return JsonResponse({'message': 'Invalid request method'})
 
-    
 
 def home(request):
     return render(request, "core/index.html")
@@ -348,8 +351,6 @@ def tasks(request):
         task.is_due = False
         if task.due_date and not task.completed and task.due_date.date() < now_date:
             task.is_due = True
-        
-        
 
     if request.method == "POST":
         # Category dropdown filter(check if category name is not all, then filter by the category_name)
@@ -371,17 +372,22 @@ def tasks(request):
                 name=category if category != "Other" else task_other_category,
                 is_others = False if category != "Other" else True,
             )
+
+            raw = due_date  # "2025-09-05"
+            dt = datetime.strptime(raw, "%Y-%m-%d")  # parses to midnight by default
+            aware_dt = make_aware(dt, timezone=zoneinfo.ZoneInfo("Africa/Lagos"))
         
             new_task = Task.objects.create(
                 title=title,
                 category=category,
                 description=description,
-                due_date=due_date,
+                due_date=aware_dt,
                 user=request.user,
             )
             
             category.save()
             new_task.save()
+            create_event(new_task, request.user)
             
             return redirect("core:dashboard")
         else:
@@ -418,6 +424,7 @@ def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
     if request.method == "POST":
         task.delete()
+        delete_event(task, request.user)
         return redirect("core:tasks")
 
 

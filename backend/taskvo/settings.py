@@ -138,6 +138,7 @@ LOGIN_REDIRECT_URL = "core:dashboard"
 LOGOUT_REDIRECT_URL = "/"
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_STORE_TOKENS = True
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
@@ -146,7 +147,7 @@ SOCIALACCOUNT_PROVIDERS = {
             "secret": os.getenv("GOOGLE_CLIENT_SECRET"),
             "key": "",
         },
-        "SCOPE": ["profile", "email"],
-        "AUTH_PARAMS": {"access_type": "online"},
+        "SCOPE": ["profile", "email", "https://www.googleapis.com/auth/calendar.events"],
+        "AUTH_PARAMS": {"access_type": "offline"},
     }
 }

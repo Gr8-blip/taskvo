@@ -29,6 +29,7 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     completed = models.BooleanField(default=False)
     is_due = models.BooleanField(default=False)
+    google_event_id = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.title

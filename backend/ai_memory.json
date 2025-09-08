@@ -10,43 +10,43 @@
   "1": [
     {
       "role": "user",
-      "message": "Delete task #1"
-    },
-    {
-      "role": "ai",
-      "message": "{\"command\": \"none\", \"message\": \"Request failed with status code 503\"}"
-    },
-    {
-      "role": "user",
-      "message": "Delete task with Id 1"
-    },
-    {
-      "role": "ai",
-      "message": " {\n  \"command\": \"delete\",\n  \"id\": 1\n}"
-    },
-    {
-      "role": "user",
-      "message": "delete task go to walmart"
-    },
-    {
-      "role": "ai",
-      "message": " {\n  \"command\": \"delete\",\n  \"title\": \"go to walmart\"\n}"
-    },
-    {
-      "role": "user",
-      "message": "YO taskVo please generate a description for this task: Finish project review"
-    },
-    {
-      "role": "ai",
-      "message": " {\n  \"command\": \"describe\",\n  \"title\": \"Finish project review\"\n}"
-    },
-    {
-      "role": "user",
       "message": "Hi"
     },
     {
       "role": "ai",
       "message": " {\n  \"command\": \"none\",\n  \"message\": \"Hello! How can I help you with your tasks today?\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "add a task do homework"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add\",\n  \"title\": \"Do homework\",\n  \"description\": \"Complete assigned tasks and studies.\",\n  \"category\": \"Study\",\n  \"due\": \"tomorrow\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "add a task do homework"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"add\",\n  \"title\": \"Do homework\",\n  \"description\": \"Complete assigned tasks and studies.\",\n  \"category\": \"Study\",\n  \"due\": \"tomorrow\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "delete task do homework"
+    },
+    {
+      "role": "ai",
+      "message": " {\n  \"command\": \"delete\",\n  \"title\": \"Do homework\"\n}"
+    },
+    {
+      "role": "user",
+      "message": "#8"
+    },
+    {
+      "role": "ai",
+      "message": " {\"command\": \"add\", \"title\": \"Buy groceries\", \"description\": \"Purchase essential groceries for the week.\", \"category\": \"Personal\", \"due\": \"tomorrow\"}"
     }
   ],
   "2": [
